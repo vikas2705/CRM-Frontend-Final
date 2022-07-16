@@ -33,11 +33,11 @@ const Signup = props => {
 
     const handleSignupSubmit = event => {
         const data = {
+            name: signupUserName,
             userId: signupUserId,
-            password: signupPassword,
             email: signupEmail,
-            userName: signupUserName,
             userType: signupUserType,
+            password: signupPassword,
         };
         onSubmit(data, event);
     };

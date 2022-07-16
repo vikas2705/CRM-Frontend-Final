@@ -3,8 +3,8 @@ import "../styles/login.css";
 import spinner from "../assets/spinnerwheel.gif";
 import Signin from "../components/Signin";
 import Signup from "../components/Signup";
-
 import { useNavigate } from "react-router-dom";
+import { newUserSignin, newUserSignup } from "../api/auth";
 
 const Login = () => {
     const [showLoader, setShowLoader] = useState(false);
@@ -22,7 +22,19 @@ const Login = () => {
     const handleLoginSubmit = (data, event) => {
         console.log(data);
         showHideLoader();
-        navigate("/admin");
+
+        newUserSignin(data)
+            .then(res => {
+                if (res.status === 200) {
+                    alert("signin successful");
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("signup error");
+            });
+
+        //navigate("/admin");
         // make an api call -->  loginUser(data)
         // redirect to different page on success
         //alert("login successful");
@@ -32,7 +44,17 @@ const Login = () => {
     const handleSignupSubmit = (data, event) => {
         console.log(data);
         showHideLoader();
-        navigate("/customer");
+        // navigate("/customer");
+        newUserSignup(data)
+            .then(res => {
+                if (res.status === 201) {
+                    alert("signup successful");
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("signup error");
+            });
         // make an api call -->  loginUser(data)
         // redirect to different page on success
         //alert("login successful");
