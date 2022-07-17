@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 const Signin = props => {
     const { onSubmit, setShowSignupForm } = props;
@@ -48,8 +47,6 @@ const Signin = props => {
                 </div>
                 <div>
                     <input type='submit' value='Log In' />
-
-                    <Link to='/engineer'>Go to Engineer</Link>
                 </div>
                 <div>
                     <span>

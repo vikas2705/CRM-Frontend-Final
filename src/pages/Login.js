@@ -1,15 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/login.css";
 import spinner from "../assets/spinnerwheel.gif";
 import Signin from "../components/Signin";
 import Signup from "../components/Signup";
 import { useNavigate } from "react-router-dom";
 import { newUserSignin, newUserSignup } from "../api/auth";
+import { USER_ROLES } from "../constants/userRoles";
 
 const Login = () => {
     const [showLoader, setShowLoader] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem("accessToken")) {
+            const userTypes = localStorage.getItem("userTypes");
+            redirectToHomePage(userTypes);
+        }
+    }, []);
+
+    const redirectToHomePage = userTypes => {
+        if (userTypes === USER_ROLES.CUSTOMER) {
+            navigate("/customer");
+        } else if (userTypes === USER_ROLES.ENGINEER) {
+            navigate("/engineer");
+        } else {
+            navigate("/admin");
+        }
+    };
 
     const showHideLoader = () => {
         setShowLoader(true);
@@ -20,44 +38,60 @@ const Login = () => {
     };
 
     const handleLoginSubmit = (data, event) => {
-        console.log(data);
         showHideLoader();
 
         newUserSignin(data)
             .then(res => {
                 if (res.status === 200) {
-                    alert("signin successful");
+                    /**
+                     * 1. We need to store the user information in thr browser
+                     * 2. using localstorage
+                     * 3. redirect to the correct page acc to usertype
+                     * 4. handle for error failure cases
+                     */
+                    const {
+                        accessToken,
+                        email,
+                        name,
+                        userId,
+                        userStatus,
+                        userTypes,
+                        message,
+                    } = res.data;
+
+                    if (message) {
+                        alert(message);
+                    } else {
+                        localStorage.setItem("accessToken", accessToken);
+                        localStorage.setItem("email", email);
+                        localStorage.setItem("name", name);
+                        localStorage.setItem("userId", userId);
+                        localStorage.setItem("userStatus", userStatus);
+                        localStorage.setItem("userTypes", userTypes);
+
+                        redirectToHomePage(userTypes);
+                    }
                 }
             })
             .catch(err => {
                 console.log(err);
-                alert("signup error");
             });
 
-        //navigate("/admin");
-        // make an api call -->  loginUser(data)
-        // redirect to different page on success
-        //alert("login successful");
         event.preventDefault();
     };
 
     const handleSignupSubmit = (data, event) => {
-        console.log(data);
         showHideLoader();
-        // navigate("/customer");
         newUserSignup(data)
             .then(res => {
                 if (res.status === 201) {
-                    alert("signup successful");
+                    setShowSignupForm(false);
                 }
             })
             .catch(err => {
                 console.log(err);
-                alert("signup error");
+                alert(err);
             });
-        // make an api call -->  loginUser(data)
-        // redirect to different page on success
-        //alert("login successful");
         event.preventDefault();
     };
 
