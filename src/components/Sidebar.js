@@ -4,7 +4,7 @@ import Logout from "./Logout";
 
 function Sidebar() {
     return (
-        <CSidebar unfoldable className='vh-100 bg-black'>
+        <CSidebar unfoldable className='height-100p bg-black'>
             <CSidebarNav>
                 <CNavItem href='#' className='bg-dark'>
                     <i className='bi bi-bar-chart-fill text-white m-2'></i>

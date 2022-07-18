@@ -1,12 +1,13 @@
 import React from "react";
-import Logout from "../components/Logout";
+import Sidebar from "../components/Sidebar";
 
 const Admin = () => {
     return (
-        <div>
-            <h1>This is Admin page</h1>
-            <Logout />
-        </div>
+        <section className='bg-light min-vh-100'>
+            <div className='col-1'>
+                <Sidebar />
+            </div>
+        </section>
     );
 };
 
